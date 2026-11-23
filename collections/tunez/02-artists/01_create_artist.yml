@@ -1,0 +1,50 @@
+info:
+  name: Create Artist
+  type: http
+  seq: 3
+  tags:
+    - music
+    - artist
+    - json-api
+http:
+  method: POST
+  url: "{{base_url}}/api/json/artists"
+  headers:
+    - name: Accept
+      value: application/vnd.api+json
+    - name: Content-Type
+      value: application/vnd.api+json
+  body:
+    type: json
+    data: |-
+      {
+        "data": {
+          "attributes": {
+            "biography": "British rock band formed in London in 1970.",
+            "name": "Queen"
+          },
+          "type": "artist"
+        }
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+runtime:
+  actions:
+    - type: set-variable
+      phase: after-response
+      selector:
+        expression: res.body.data.id
+        method: jsonq
+      variable:
+        name: artist_id
+        scope: runtime
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "201"
+    - expression: res.body.data.id
+      operator: isDefined
+    - expression: res.body.data.attributes.name
+      operator: eq
+      value: Queen

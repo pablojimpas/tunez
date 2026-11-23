@@ -1,0 +1,43 @@
+info:
+  name: Sign In User
+  type: http
+  seq: 2
+  tags:
+    - accounts
+    - json-api
+http:
+  method: POST
+  url: "{{base_url}}/api/json/users/sign-in"
+  headers:
+    - name: Accept
+      value: application/vnd.api+json
+    - name: Content-Type
+      value: application/vnd.api+json
+  body:
+    type: json
+    data: |-
+      {
+        "data": {
+          "attributes": {
+            "email": "{{email}}",
+            "password": "{{password}}"
+          },
+          "type": "user"
+        }
+      }
+runtime:
+  actions:
+    - type: set-variable
+      phase: after-response
+      selector:
+        expression: res.body.meta.token
+        method: jsonq
+      variable:
+        name: token
+        scope: runtime
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "201"
+    - expression: res.body.meta.token
+      operator: isDefined

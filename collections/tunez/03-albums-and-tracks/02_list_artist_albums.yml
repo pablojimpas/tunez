@@ -1,0 +1,21 @@
+info:
+  name: List Artist Albums
+  type: http
+  seq: 8
+  tags:
+    - music
+    - album
+    - json-api
+http:
+  method: GET
+  url: "{{base_url}}/api/json/artists/{{artist_id}}/albums"
+  headers:
+    - name: Accept
+      value: application/vnd.api+json
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.data
+      operator: isArray

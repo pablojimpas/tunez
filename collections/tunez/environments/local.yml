@@ -1,0 +1,10 @@
+name: local
+variables:
+  - name: base_url
+    value: "http://127.0.0.1:4000"
+  - name: email
+    value: "curator@tunez.fm"
+  - name: password
+    secret: true
+  - name: token
+    secret: true

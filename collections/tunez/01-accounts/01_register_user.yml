@@ -1,0 +1,54 @@
+info:
+  name: Register User
+  type: http
+  seq: 1
+  tags:
+    - accounts
+    - json-api
+http:
+  method: POST
+  url: "{{base_url}}/api/json/users/register"
+  headers:
+    - name: Accept
+      value: application/vnd.api+json
+    - name: Content-Type
+      value: application/vnd.api+json
+  body:
+    type: json
+    data: |-
+      {
+        "data": {
+          "attributes": {
+            "email": "{{email}}",
+            "password": "{{password}}",
+            "password_confirmation": "{{password}}"
+          },
+          "type": "user"
+        }
+      }
+runtime:
+  actions:
+    - type: set-variable
+      phase: after-response
+      selector:
+        expression: res.body.meta.token
+        method: jsonq
+      variable:
+        name: token
+        scope: runtime
+    - type: set-variable
+      phase: after-response
+      selector:
+        expression: res.body.data.id
+        method: jsonq
+      variable:
+        name: user_id
+        scope: runtime
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "201"
+    - expression: res.body.meta.token
+      operator: isDefined
+    - expression: res.body.data.id
+      operator: isDefined

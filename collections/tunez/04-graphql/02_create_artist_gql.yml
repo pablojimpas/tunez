@@ -1,0 +1,55 @@
+info:
+  name: Create Artist (GraphQL)
+  type: graphql
+  seq: 12
+  tags:
+    - music
+    - artist
+    - graphql
+graphql:
+  url: "{{base_url}}/gql"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    query: |
+      mutation CreateArtist($input: CreateArtistInput!) {
+        createArtist(input: $input) {
+          result {
+            id
+            name
+            biography
+          }
+          errors {
+            message
+          }
+        }
+      }
+    variables: |-
+      {
+        "input": {
+          "biography": "English progressive rock band formed in London in 1965.",
+          "name": "Pink Floyd"
+        }
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+runtime:
+  actions:
+    - type: set-variable
+      phase: after-response
+      selector:
+        expression: res.body.data.createArtist.result.id
+        method: jsonq
+      variable:
+        name: gql_artist_id
+        scope: runtime
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.data.createArtist.result.id
+      operator: isDefined
+    - expression: res.body.data.createArtist.errors
+      operator: isEmpty

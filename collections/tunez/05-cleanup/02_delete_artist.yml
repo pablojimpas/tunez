@@ -1,0 +1,22 @@
+info:
+  name: Delete Artist
+  type: http
+  seq: 16
+  tags:
+    - music
+    - artist
+    - json-api
+http:
+  method: DELETE
+  url: "{{base_url}}/api/json/artists/{{artist_id}}"
+  headers:
+    - name: Accept
+      value: application/vnd.api+json
+  auth:
+    type: bearer
+    token: "{{token}}"
+runtime:
+  assertions:
+    - expression: res.status
+      operator: in
+      value: "200,204"

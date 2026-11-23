@@ -1,0 +1,65 @@
+info:
+  name: Create Album with Tracks
+  type: http
+  seq: 7
+  tags:
+    - music
+    - album
+    - track
+    - json-api
+http:
+  method: POST
+  url: "{{base_url}}/api/json/albums"
+  headers:
+    - name: Accept
+      value: application/vnd.api+json
+    - name: Content-Type
+      value: application/vnd.api+json
+  body:
+    type: json
+    data: |-
+      {
+        "data": {
+          "attributes": {
+            "artist_id": "{{artist_id}}",
+            "cover_image_url": "/images/a-night-at-the-opera.jpg",
+            "name": "A Night at the Opera",
+            "tracks": [
+              {
+                "duration": "03:43",
+                "name": "Death on Two Legs",
+                "order": 0
+              },
+              {
+                "duration": "05:55",
+                "name": "Bohemian Rhapsody",
+                "order": 1
+              }
+            ],
+            "year_released": 1975
+          },
+          "type": "album"
+        }
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+runtime:
+  actions:
+    - type: set-variable
+      phase: after-response
+      selector:
+        expression: res.body.data.id
+        method: jsonq
+      variable:
+        name: album_id
+        scope: runtime
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "201"
+    - expression: res.body.data.id
+      operator: isDefined
+    - expression: res.body.data.attributes.name
+      operator: eq
+      value: A Night at the Opera

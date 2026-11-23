@@ -1,3 +1,6 @@
+> [!NOTE]
+> **OpenCollection Showcase Fork** — This `opencollection-showcase` branch is a fork of [sevenseacat/tunez](https://github.com/sevenseacat/tunez) (`end-of-chapter-10`) demonstrating [ash_opencollection](https://github.com/pablojimpas/ash_opencollection) and [open_collection](https://github.com/pablojimpas/open_collection) with JSON:API and GraphQL requests (see `collections/tunez/` and [`documentation/tutorials/tunez-walkthrough.md`](documentation/tutorials/tunez-walkthrough.md)).
+
 # Tunez
 
 The starter app for the upcoming [Ash Framework](https://pragprog.com/titles/ldash/ash-framework/) book.

@@ -1,0 +1,30 @@
+info:
+  name: Get Artist with Albums and Tracks
+  type: http
+  seq: 9
+  tags:
+    - music
+    - artist
+    - album
+    - track
+    - json-api
+http:
+  method: GET
+  url: "{{base_url}}/api/json/artists/{{artist_id}}"
+  headers:
+    - name: Accept
+      value: application/vnd.api+json
+  params:
+    - name: include
+      value: albums.tracks
+      type: query
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.data.id
+      operator: eq
+      value: "{{artist_id}}"
+    - expression: res.body.included
+      operator: isArray

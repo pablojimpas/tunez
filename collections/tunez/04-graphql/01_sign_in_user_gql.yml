@@ -1,0 +1,41 @@
+info:
+  name: Sign In User (GraphQL)
+  type: graphql
+  seq: 11
+  tags:
+    - accounts
+    - graphql
+graphql:
+  url: "{{base_url}}/gql"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    query: |
+      query SignInUser($email: String!, $password: String!) {
+        signInUser(email: $email, password: $password) {
+          id
+          token
+        }
+      }
+    variables: |-
+      {
+        "email": "{{email}}",
+        "password": "{{password}}"
+      }
+runtime:
+  actions:
+    - type: set-variable
+      phase: after-response
+      selector:
+        expression: res.body.data.signInUser.token
+        method: jsonq
+      variable:
+        name: token
+        scope: runtime
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.data.signInUser.token
+      operator: isDefined

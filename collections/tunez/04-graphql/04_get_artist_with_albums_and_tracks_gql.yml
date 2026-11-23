@@ -1,0 +1,50 @@
+info:
+  name: Get Artist with Albums and Tracks (GraphQL)
+  type: graphql
+  seq: 14
+  tags:
+    - music
+    - artist
+    - album
+    - track
+    - graphql
+graphql:
+  url: "{{base_url}}/gql"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    query: |
+      query GetArtistById($id: ID!) {
+        getArtistById(id: $id) {
+          id
+          name
+          albumCount
+          albums {
+            id
+            name
+            yearReleased
+            duration
+            tracks {
+              id
+              number
+              name
+              duration
+            }
+          }
+        }
+      }
+    variables: |-
+      {
+        "id": "{{gql_artist_id}}"
+      }
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.data.getArtistById.id
+      operator: eq
+      value: "{{gql_artist_id}}"
+    - expression: res.body.data.getArtistById.albums
+      operator: isArray

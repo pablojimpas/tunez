@@ -1,0 +1,22 @@
+info:
+  name: Get Artist by ID
+  type: http
+  seq: 5
+  tags:
+    - music
+    - artist
+    - json-api
+http:
+  method: GET
+  url: "{{base_url}}/api/json/artists/{{artist_id}}"
+  headers:
+    - name: Accept
+      value: application/vnd.api+json
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.data.id
+      operator: eq
+      value: "{{artist_id}}"

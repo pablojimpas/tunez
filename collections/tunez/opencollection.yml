@@ -1,0 +1,5 @@
+opencollection: 1.0.0
+info:
+  name: Tunez API Showcase
+  summary: "End-to-end JSON:API and GraphQL collection for Tunez covering Bearer auth chaining and Artist -> Album -> Track"
+  version: 1.0.0

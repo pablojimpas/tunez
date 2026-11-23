@@ -1,0 +1,58 @@
+info:
+  name: Update Album Tracks
+  type: http
+  seq: 10
+  tags:
+    - music
+    - album
+    - track
+    - json-api
+http:
+  method: PATCH
+  url: "{{base_url}}/api/json/albums/{{album_id}}"
+  headers:
+    - name: Accept
+      value: application/vnd.api+json
+    - name: Content-Type
+      value: application/vnd.api+json
+  body:
+    type: json
+    data: |-
+      {
+        "data": {
+          "attributes": {
+            "name": "A Night at the Opera (Deluxe)",
+            "tracks": [
+              {
+                "duration": "03:43",
+                "name": "Death on Two Legs",
+                "order": 0
+              },
+              {
+                "duration": "01:07",
+                "name": "Lazing on a Sunday Afternoon",
+                "order": 1
+              },
+              {
+                "duration": "05:55",
+                "name": "Bohemian Rhapsody",
+                "order": 2
+              }
+            ],
+            "year_released": 1975
+          },
+          "id": "{{album_id}}",
+          "type": "album"
+        }
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.data.id
+      operator: eq
+      value: "{{album_id}}"
